@@ -1,0 +1,55 @@
+/*Autor-JHA INDUSTRIES*\
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+
+Adafruit_PWMServoDriver driver = Adafruit_PWMServoDriver(0x40);
+
+#define SERVO_MIN 150
+#define SERVO_MAX 600
+
+void setServoAngle(int channel, int angle) {
+  angle = constrain(angle, 0, 180);
+
+  int pulse = map(angle, 0, 180, SERVO_MIN, SERVO_MAX);
+
+  driver.setPWM(channel, 0, pulse);
+}
+
+void moveLeftToRight(int channel) {
+  for (int angle = 0; angle <= 180; angle++) {
+    setServoAngle(channel, angle);
+    delay(10);
+  }
+}
+
+void setup() {
+  driver.begin();
+  driver.setPWMFreq(50);
+
+  // Start all servos at the left position
+  setServoAngle(0, 0);
+  setServoAngle(1, 0);
+  setServoAngle(2, 0);
+
+  delay(500);
+}
+
+void loop() {
+
+  // Servo 1: left → right
+  moveLeftToRight(0);
+
+  delay(200);
+
+  // Servo 2: left → right
+  moveLeftToRight(1);
+
+  delay(200);
+
+  // Servo 3: left → right
+  moveLeftToRight(2);
+
+  delay(200);
+
+  // Start again with Servo 1
+}
